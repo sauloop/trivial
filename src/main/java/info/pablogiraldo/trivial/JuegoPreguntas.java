@@ -258,7 +258,8 @@ public class JuegoPreguntas {
 				this.puntos++;
 			}
 		}
-
+		System.out.println("\n");
+		System.out.println("Has conseguido " + this.puntos + " puntos.");
 		this.datosJugador(sc);
 
 	}
@@ -326,8 +327,8 @@ public class JuegoPreguntas {
 
 				pregunta.addContent(new Element("preguntar").setText(preg.getPregunta()));
 				pregunta.addContent(new Element("opcion1").setText(preg.getOpcion1()));
-				pregunta.addContent(new Element("opcion1").setText(preg.getOpcion2()));
-				pregunta.addContent(new Element("opcion1").setText(preg.getOpcion3()));
+				pregunta.addContent(new Element("opcion2").setText(preg.getOpcion2()));
+				pregunta.addContent(new Element("opcion3").setText(preg.getOpcion3()));
 				pregunta.addContent(new Element("respuesta").setText(Integer.toString(preg.getRespuesta())));
 
 				doc.getRootElement().addContent(pregunta);

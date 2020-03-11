@@ -1,6 +1,3 @@
-¿Caballo blanco?#azul#gris#blanco#3
-¿Caballo azul?#azul#gris#blanco#1
-¿Caballo rosa?#verde#violeta#rosa#3
-¿Caballo gris?#blanco#azul#gris#3
-¿Caballo verde?#verde#gris#negro#1
-test#a#b#c#3
+¿Caballo blanco?#1.Azul#2.Gris#3.Blanco#3
+¿Caballo azul?#1.Azul#2.Gris#3.Blanco#1
+¿Caballo rosa?#1.Verde#2.Violeta#3.Rosa#3
