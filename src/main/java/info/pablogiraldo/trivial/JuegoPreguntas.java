@@ -24,8 +24,20 @@ import jxl.read.biff.BiffException;
 import java.io.File;
 //import java.io.IOException;
 
+//import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.FontFactory;
+//import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+
+//import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+//import java.io.IOException;
+
 public class JuegoPreguntas {
 
+	private String jugadorActual;
 	private int puntos;
 
 	private String rutaDatosPreguntas;
@@ -38,6 +50,7 @@ public class JuegoPreguntas {
 	private ArrayList<String> nombresJugadores;
 
 	public JuegoPreguntas() {
+		this.jugadorActual = "";
 		this.puntos = 0;
 		this.rutaDatosPreguntas = "txt/preguntas.txt";
 		this.rutaDatosPuntuaciones = "txt/puntuaciones.txt";
@@ -239,6 +252,7 @@ public class JuegoPreguntas {
 
 	public void jugar(Scanner sc) {
 
+		this.jugadorActual = "";
 		this.puntos = 0;
 
 		for (int i = 0; i < this.preguntas.size(); i++) {
@@ -266,26 +280,42 @@ public class JuegoPreguntas {
 
 	public void datosJugador(Scanner sc) {
 
-		String nombre = "";
+		String nombreJugador = "";
+		String usrIn = "";
+		int opcionPdf = -1;
 
 		System.out.println("\n");
 		System.out.println("Nombre:");
-		nombre = sc.nextLine();
+		nombreJugador = sc.nextLine();
+		this.jugadorActual = nombreJugador;
 
-		if (!this.nombresJugadores.contains(nombre)) {
-			Puntuacion puntuacion = new Puntuacion(nombre, this.puntos);
+		if (!this.nombresJugadores.contains(nombreJugador)) {
+			Puntuacion puntuacion = new Puntuacion(nombreJugador, this.puntos);
 			this.puntuaciones.add(puntuacion);
 
 			this.guardarPuntuaciones();
 
 		} else {
 			for (int i = 0; i < this.puntuaciones.size(); i++) {
-				if (puntuaciones.get(i).getNombre().equals(nombre) && puntuaciones.get(i).getPuntos() < this.puntos) {
+				if (puntuaciones.get(i).getNombre().equals(nombreJugador)
+						&& puntuaciones.get(i).getPuntos() < this.puntos) {
 					puntuaciones.get(i).setPuntos(this.puntos);
 				}
 			}
 
 			this.guardarPuntuaciones();
+		}
+
+		System.out.println("\n");
+		System.out.println("¿Quieres un informe de la partida?");
+		System.out.println("1.Sí");
+		System.out.println("2.No");
+		System.out.println("Opción:");
+		usrIn = sc.nextLine();
+		opcionPdf = Integer.parseInt(usrIn);
+
+		if (opcionPdf == 1) {
+			this.exportarPdf();
 		}
 
 	}
@@ -407,6 +437,91 @@ public class JuegoPreguntas {
 			}
 
 		}
+	}
+
+	public void exportarPdf() {
+
+		com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+
+		try {
+
+			PdfWriter.getInstance(document, new FileOutputStream(new File("C:\\Users\\Public\\Desktop\\trivial.pdf")));
+
+			// open
+			document.open();
+
+//			com.itextpdf.text.Paragraph p = new com.itextpdf.text.Paragraph();
+//			p.add("This is my paragraph 1");
+//			p.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+
+			float fntSize, lineSpacing;
+			fntSize = 35.0f;
+			lineSpacing = 10f;
+			com.itextpdf.text.Paragraph p = new com.itextpdf.text.Paragraph(new Phrase(lineSpacing,
+					"Informe " + this.jugadorActual, FontFactory.getFont(FontFactory.HELVETICA, fntSize)));
+
+			p.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+			p.setSpacingBefore(50.0f);
+
+			document.add(p);
+
+			fntSize = 25.0f;
+			lineSpacing = 10f;
+			com.itextpdf.text.Paragraph p1 = new com.itextpdf.text.Paragraph(new Phrase(lineSpacing,
+					"Puntos: " + this.puntos, FontFactory.getFont(FontFactory.HELVETICA, fntSize)));
+
+			p1.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+			p1.setSpacingBefore(50.0f);
+			p1.setSpacingAfter(50.0f);
+
+			document.add(p1);
+
+			for (int i = 0; i < this.preguntas.size(); i++) {
+				Pregunta preg = this.preguntas.get(i);
+
+				fntSize = 20.0f;
+				lineSpacing = 10f;
+				com.itextpdf.text.Paragraph p3 = new com.itextpdf.text.Paragraph(new Phrase(lineSpacing,
+						preg.getPregunta(), FontFactory.getFont(FontFactory.HELVETICA, fntSize)));
+
+				p3.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+				p3.setSpacingBefore(30.0f);
+
+				document.add(p3);
+
+				com.itextpdf.text.Paragraph p4 = new com.itextpdf.text.Paragraph(new Phrase(lineSpacing,
+						preg.getOpcion1() + " | " + preg.getOpcion2() + " | " + preg.getOpcion3(),
+						FontFactory.getFont(FontFactory.HELVETICA, fntSize)));
+
+				p4.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+				p4.setSpacingBefore(30.0f);
+
+				document.add(p4);
+
+				com.itextpdf.text.Paragraph p5 = new com.itextpdf.text.Paragraph(
+						new Phrase(lineSpacing, "Respuesta correcta: " + Integer.toString(preg.getRespuesta()),
+								FontFactory.getFont(FontFactory.HELVETICA, fntSize)));
+
+				p5.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+				p5.setSpacingBefore(30.0f);
+				p5.setSpacingAfter(30.0f);
+
+				document.add(p5);
+			}
+
+			// close
+			document.close();
+
+			System.out.println("\n");
+			System.out.println("trivial.pdf exportado al escritorio.");
+
+		} catch (FileNotFoundException | com.itextpdf.text.DocumentException e) {
+			e.printStackTrace();
+		}
+
+//		catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 }

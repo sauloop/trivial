@@ -8,6 +8,8 @@ public class App {
 
 //		juegoPreguntas.importarExcel();
 
+//		juegoPreguntas.exportarPdf();
+
 		juegoPreguntas.menu();
 
 	}
