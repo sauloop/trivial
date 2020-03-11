@@ -1,0 +1,3 @@
+¿Caballo blanco?#azul#gris#blanco#3
+¿Caballo azul?#azul#gris#blanco#1
+¿Caballo rosa?#verde#violeta#rosa#3
