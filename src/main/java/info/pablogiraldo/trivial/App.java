@@ -6,6 +6,8 @@ public class App {
 
 		juegoPreguntas.cargarDatos();
 
+//		juegoPreguntas.importarExcel();
+
 		juegoPreguntas.menu();
 
 	}

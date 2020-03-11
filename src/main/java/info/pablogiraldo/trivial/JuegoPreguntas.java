@@ -16,6 +16,14 @@ import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+
+import java.io.File;
+//import java.io.IOException;
+
 public class JuegoPreguntas {
 
 	private int puntos;
@@ -74,7 +82,8 @@ public class JuegoPreguntas {
 			System.out.println("2.Añadir pregunta");
 			System.out.println("3.Exportar preguntas");
 			System.out.println("4.Instrucciones");
-			System.out.println("5.Ver puntuaciones");
+			System.out.println("5.Importar preguntas");
+			System.out.println("6.Ver puntuaciones");
 			System.out.println("0.Salir");
 
 			System.out.println("\n");
@@ -103,6 +112,10 @@ public class JuegoPreguntas {
 				break;
 
 			case 5:
+				this.importarExcel();
+				break;
+
+			case 6:
 				this.listarPuntuaciones();
 				break;
 
@@ -329,6 +342,69 @@ public class JuegoPreguntas {
 			System.out.println("preguntas.xml exportado al escritorio.");
 		} catch (IOException io) {
 			System.out.println(io.getMessage());
+		}
+	}
+
+	public void importarExcel() {
+
+		Workbook workbook = null;
+		try {
+
+			workbook = Workbook.getWorkbook(new File("xls/preguntas.xls"));
+
+			Sheet sheet = workbook.getSheet(0);
+			int numRows = sheet.getRows();
+
+			for (int i = 1; i < numRows; i++) {
+
+				Cell preguntar = sheet.getCell(0, i);
+				String preg = "¿" + preguntar.getContents() + "?";
+				Cell opcion1 = sheet.getCell(1, i);
+				String op1 = opcion1.getContents();
+				Cell opcion2 = sheet.getCell(2, i);
+				String op2 = opcion2.getContents();
+				Cell opcion3 = sheet.getCell(3, i);
+				String op3 = opcion3.getContents();
+				Cell respuesta = sheet.getCell(4, i);
+				String res = respuesta.getContents();
+
+				Pregunta nuevaPregunta = new Pregunta();
+
+				nuevaPregunta.setPregunta(preg);
+				nuevaPregunta.setOpcion1(op1);
+				nuevaPregunta.setOpcion2(op2);
+				nuevaPregunta.setOpcion3(op3);
+				nuevaPregunta.setRespuesta(Integer.parseInt(res));
+
+				this.preguntas.add(nuevaPregunta);
+
+			}
+
+			this.guardarPreguntas();
+			System.out.println("\n");
+			System.out.println("Archivo excel importado.");
+
+//			Cell preguntar = sheet.getCell(0, 1);
+//			System.out.println("¿" + preguntar.getContents() + "?");
+//			Cell opcion1 = sheet.getCell(1, 1);
+//			System.out.println(opcion1.getContents());
+//			Cell opcion2 = sheet.getCell(2, 1);
+//			System.out.println(opcion2.getContents());
+//			Cell opcion3 = sheet.getCell(3, 1);
+//			System.out.println(opcion3.getContents());
+//			Cell respuesta = sheet.getCell(4, 1);
+//			System.out.println(respuesta.getContents());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (BiffException e) {
+			e.printStackTrace();
+		} finally {
+
+			if (workbook != null) {
+				workbook.close();
+			}
+
 		}
 	}
 
