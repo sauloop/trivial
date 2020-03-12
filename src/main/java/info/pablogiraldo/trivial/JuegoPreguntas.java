@@ -42,6 +42,9 @@ public class JuegoPreguntas {
 
 	private String rutaDatosPreguntas;
 	private String rutaDatosPuntuaciones;
+	private String rutaExportarXml;
+	private String rutaImportarExcel;
+	private String rutaExportarPdf;
 
 	private ArrayList<Pregunta> preguntas;
 
@@ -54,6 +57,9 @@ public class JuegoPreguntas {
 		this.puntos = 0;
 		this.rutaDatosPreguntas = "txt/preguntas.txt";
 		this.rutaDatosPuntuaciones = "txt/puntuaciones.txt";
+		this.rutaExportarXml = "C:\\Users\\Public\\Desktop\\preguntas.xml";
+		this.rutaImportarExcel = "xls/preguntas.xls";
+		this.rutaExportarPdf = "C:\\Users\\Public\\Desktop\\trivial.pdf";
 		this.preguntas = new ArrayList<Pregunta>();
 		this.puntuaciones = new ArrayList<Puntuacion>();
 		this.nombresJugadores = new ArrayList<String>();
@@ -273,7 +279,7 @@ public class JuegoPreguntas {
 			}
 		}
 		System.out.println("\n");
-		System.out.println("Has conseguido " + this.puntos + " puntos.");
+		System.out.println("Puntos conseguidos: " + this.puntos);
 		this.datosJugador(sc);
 
 	}
@@ -367,7 +373,7 @@ public class JuegoPreguntas {
 			XMLOutputter xmlOutput = new XMLOutputter();
 
 			xmlOutput.setFormat(Format.getPrettyFormat());
-			xmlOutput.output(doc, new FileWriter("C:\\Users\\Public\\Desktop\\preguntas.xml"));
+			xmlOutput.output(doc, new FileWriter(this.rutaExportarXml));
 
 			System.out.println("\n");
 			System.out.println("preguntas.xml exportado al escritorio.");
@@ -381,7 +387,7 @@ public class JuegoPreguntas {
 		Workbook workbook = null;
 		try {
 
-			workbook = Workbook.getWorkbook(new File("xls/preguntas.xls"));
+			workbook = Workbook.getWorkbook(new File(this.rutaImportarExcel));
 
 			Sheet sheet = workbook.getSheet(0);
 			int numRows = sheet.getRows();
@@ -413,18 +419,7 @@ public class JuegoPreguntas {
 
 			this.guardarPreguntas();
 			System.out.println("\n");
-			System.out.println("Archivo excel importado.");
-
-//			Cell preguntar = sheet.getCell(0, 1);
-//			System.out.println("¿" + preguntar.getContents() + "?");
-//			Cell opcion1 = sheet.getCell(1, 1);
-//			System.out.println(opcion1.getContents());
-//			Cell opcion2 = sheet.getCell(2, 1);
-//			System.out.println(opcion2.getContents());
-//			Cell opcion3 = sheet.getCell(3, 1);
-//			System.out.println(opcion3.getContents());
-//			Cell respuesta = sheet.getCell(4, 1);
-//			System.out.println(respuesta.getContents());
+			System.out.println("preguntas.xls importado.");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -445,14 +440,9 @@ public class JuegoPreguntas {
 
 		try {
 
-			PdfWriter.getInstance(document, new FileOutputStream(new File("C:\\Users\\Public\\Desktop\\trivial.pdf")));
+			PdfWriter.getInstance(document, new FileOutputStream(new File(this.rutaExportarPdf)));
 
-			// open
 			document.open();
-
-//			com.itextpdf.text.Paragraph p = new com.itextpdf.text.Paragraph();
-//			p.add("This is my paragraph 1");
-//			p.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 
 			float fntSize, lineSpacing;
 			fntSize = 35.0f;
@@ -509,7 +499,6 @@ public class JuegoPreguntas {
 				document.add(p5);
 			}
 
-			// close
 			document.close();
 
 			System.out.println("\n");
@@ -519,9 +508,6 @@ public class JuegoPreguntas {
 			e.printStackTrace();
 		}
 
-//		catch (IOException e) {
-//			e.printStackTrace();
-//		}
 	}
 
 }
