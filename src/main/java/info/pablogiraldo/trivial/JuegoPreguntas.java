@@ -59,7 +59,7 @@ public class JuegoPreguntas {
 		this.rutaDatosPuntuaciones = "txt/puntuaciones.txt";
 		this.rutaExportarXml = "C:\\Users\\Public\\Desktop\\preguntas.xml";
 		this.rutaImportarExcel = "xls/preguntas.xls";
-		this.rutaExportarPdf = "C:\\Users\\Public\\Desktop\\trivial.pdf";
+		this.rutaExportarPdf = "C:\\Users\\Public\\Desktop\\partida.pdf";
 		this.preguntas = new ArrayList<Pregunta>();
 		this.puntuaciones = new ArrayList<Puntuacion>();
 		this.nombresJugadores = new ArrayList<String>();
